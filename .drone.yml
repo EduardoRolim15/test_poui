@@ -1,0 +1,23 @@
+kind: pipeline
+type: docker
+name: treinamento-po-ui
+workspace:
+    base: /totvs/drone
+    path: treinamento-po-ui
+steps:
+    - name: test
+      image: node:14.11
+      commands:
+        - echo "hello world Im test"
+    - name: run-sonar
+      image: docker.totvs.io/sonarqube/sonar-scanner-general
+      environment:
+        SRC_PATH: /drone/src/
+      commands:
+        - echo “sonar-step”
+    - name: build
+      image: docker.totvs.io/engpro/super-container-tool:alpine-latest
+      commands:
+        - echo "hello world Im build"
+    - name: release
+      image: plugins/gitea-release
